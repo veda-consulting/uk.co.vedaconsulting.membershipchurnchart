@@ -1,0 +1,183 @@
+/*
+    Document   : ChurnCharts
+    Created on : 22-May-2014, 11:09:19
+    Author     : mathavan@vedaconsulting.co.uk
+*/
+
+/*form block css settings*/
+
+.accordion-heading {
+    background-color: #428bca;
+    border-color: #428bca;
+    color: #fff;
+}
+
+.metric_chart_main_div{
+    background-color: #E6E6DC;
+    font-family: Helvetica;
+}
+
+.chart_heading {
+    font-family: Helvetica;
+    text-align: center;
+    font-size: 22px;
+    text-decoration: underline;
+    font-weight: bold;
+    padding-top: 10px;
+}
+
+/*top label css settings*/
+div.metric_top_label_box{
+    padding:25px 0 25px 25px;
+    margin:0 auto;
+    overflow:hidden;
+    float:left;
+    background-color: #E6E6DC;
+    font-family: Helvetica;
+    font-weight: bold;
+    text-align: center;
+    /*border-radius: 6px;*/
+}
+
+div.ex {
+    width:20%;
+    word-break:keep-all;
+    border: 1px solid #A6AEB5;
+    background-color: #E6E6DC;
+    border-radius: 4px;
+    height: 80px;
+    margin: 5px;
+    display: inline-block;
+    /*background: linear-gradient(#FCFBFA, #ECE9E0);*/
+}
+
+div.ex_inner_title
+{
+    min-height: 34px;
+    background-color: #F96C20;
+    color: #000000;
+    font-size:12px;
+}
+
+div.ex_inner
+{
+    width:60px;
+    padding:5px;
+    /*border:3px solid gray;*/
+    font-size:18px;
+    margin: 0.1em 4em;
+    text-align:center;
+}
+
+div.red_div {
+    width:50px;
+    word-break:keep-all;
+    border: 1px solid #FC0505;
+    background-color: #FC0505;
+    display: inline-block;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+div.green_div {
+    width:50px;
+    word-break:keep-all;
+    border: 1px solid #28A512;
+    background-color: #28A512;
+    display: inline-block;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.metric_type_table {
+    border: 2px solid;
+}
+
+tr.odd_row {
+    background-color: #F2B393;
+}
+tr.even_row {
+    background-color: #EFCAB8;
+}
+
+td.center_align {
+    text-align: center;
+}
+
+/* Accordions Css settings*/
+.crm-accordion-header {
+    background-color: #70716B;
+    color: #F5F6F1;
+}
+
+/*d3 chart style properties*/
+/*start*/
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+/*.x.axis path {
+  display: none;
+}*/
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+/*end*/
+
+
+/* Over ride CiviCRM CSS*/
+.crm-container table {
+    border-collapse: collapse;
+    font-size: 12px;
+    margin: 10px;
+    width: 98%;
+}
+.crm-container .crm-accordion-body {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border: none;
+    padding: 4px 0;
+}
+
+.crm-container th{
+    /*background-color: #F96C20;*/
+    background-color: #FFFFFF;
+    border-color: #ddd;
+    border-style: solid;
+    border-width: 1px 1px 2px;
+    color: #000000;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 4px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.crm-container .panel {
+    display: block;
+}
+
+#crm-container span.collapsed, #crm-container a.collapsed {
+    background: none;
+    cursor: pointer;
+    padding-left: 0px;
+}
+
+.accordion-heading a, .accordion-heading a:link, .accordion-heading a:visited {
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+#academy_logo {
+    width: 333px;
+    height: 204px;
+}
