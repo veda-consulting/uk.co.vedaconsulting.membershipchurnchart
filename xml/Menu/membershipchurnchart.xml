@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<menu>
+  <item>
+    <path>civicrm/membership/membershipchurnchart</path>
+    <page_callback>CRM_Membershipchurnchart_Page_MembershipChurnChart</page_callback>
+    <title>Membership Churn Chart</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/membership/membershipchurnchart/settings</path>
+    <page_callback>CRM_Membershipchurnchart_Form_Settings</page_callback>
+    <title>Membership Churn Chart - Setting</title>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+</menu>
