@@ -35,115 +35,32 @@
   color: #fff;
   font-size: 16px;
 }
+.crm-container [data-toggle="collapse"]::before,
+.crm-container .collapsed[data-toggle="collapse"]::before {
+  content: none;
+}
 </style>
 {/literal}
   
 <div class="container-fluid">
+
     <div style="display:none;" id="spinner">
       <i class="fa fa-refresh fa-spin btn-lg"></i> Refreshing data... Please wait for the page to reload.
     </div>
-    <div class="row" id="row_Filters">
-      <div class="col-lg-9">
-        <div class="panel1 panel1-primary">
 
-            <div class="accordion" id="Parent_Filters">
-              <div class="accordion-group">
-              <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#Parent_Membershipsummary" href="#hrefFilters">
-                  <div class="panel1-heading" id="heading_Membershipsummary">
-                    <h4 class="panel1-title"><i class="fa fa-filter"></i> Filters</h4>
-                  </div>
-                </a>
-              </div>
-              <div id="hrefFilters" class="accordion-body open">
-                <div class="accordion-inner">
-                  <div class="panel1-body">
-                        <div id="Filters">
-    
-                          <div class="row">
-                            <div class="col-lg-3">
-                              <label><strong>Years</strong></label>
-                            </div>
-                            <div class="col-lg-9">
-                              <select id="from" required="required" >
-                                <!--<option value=""> -- Select -- </option>-->
-                                {$startYearRange}
-                              </select>
-                              &nbsp;<label><strong>To</strong></label>&nbsp;
-                              <select id="to" required="required" >
-                                <!--<option value=""> -- Select -- </option>-->
-                                {$endYearRange}
-                              </select>
-                            </div>
-                          </div>
-                          <br />
-                          <!-- Filter by membership type   -->
-                          <div class="row">
-                            <div class="col-lg-3">
-                              <label><strong>Membership Types</strong></label>
-                            </div>
-                            <div class="col-lg-9">
-                              <div class="row">
-                              <div class="checkbox checkbox-success">
-                                {foreach from=$memTypes item=mTypes key=mTypeId}
-                                <div class="col-xs-6">
-                                  <input type="checkbox" name="membership_type_id" value="{$mTypeId}" checked/>{$mTypes}
-                                </div>
-                                {/foreach}
-                              </div>  
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                    </div>
-                </div>
-              </div>
-            </div>
-            </div>
-        </div>
-      </div>
-      <div class="col-lg-3">
-        <div class="panel1 panel1-primary">
-            <div class="accordion" id="Parent_Filters">
-              <div class="accordion-group">
-              <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#Parent_Membershipsummary" href="#hrefSettings">
-                  <div class="panel1-heading" id="heading_Membershipsummary">
-                    <h4 class="panel1-title"><i class="fa fa-gear"></i> Settings</h4>
-                  </div>
-                </a>
-              </div>
-              <div id="hrefSettings" class="accordion-body open">
-                <div class="accordion-inner">
-                  <div class="panel1-body">
-                    <div class="col-lg-12">
-                      <p class="text-center">
-                        <a class="btn btn-success" href="{crmURL p="civicrm/membership/membershipchurnchart/settings" q="reset=1"}"><i class="fa fa-wrench"></i> Settings</a> 
-                      </p>
-                      <p class="text-center">
-                        <a class="btn btn-success" id="refreshData" href="#"><i class="fa fa-refresh"></i> Refresh Data</a> 
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            </div>
-        </div>
-      </div>
-    </div>
+
     <div class="row" id="row_Churnchart">
       <div class="col-lg-12">
         <div class="panel1 panel1-primary">
           <div class="accordion" id="Parent_Churnchar">
             <div class="accordion-group">
               <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#Parent_Membershipsummary" href="#hrefChurnchar">
-                  <div class="panel1-heading" id="heading_Membershipsummary">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#Parent_Churnchar" href="#hrefChurnchar">
+                  <div class="panel1-heading" id="heading_Churnchar">
                     <h4 class="panel1-title"><i class="fa fa-bar-chart-o"></i> Churn By Month (<span class="summaryYears"></span>)</h4>
                   </div>
                 </a>
-              </div>              
+              </div>
               <div id="hrefChurnchar" class="accordion-body open">
                 <div class="accordion-inner">
                   <div class="panel1-body">
@@ -156,6 +73,8 @@
         </div>
       </div>
     </div>
+
+
     <div class="row" id="row_Membershipsummary">
       <div class="col-lg-12">
         <div class="panel1 panel1-primary">
@@ -180,6 +99,105 @@
         </div>
       </div>
     </div>
+
+    <div class="row" id="row_Filters">
+      {if $smarty.get.snippet neq ''} 
+      <div class="col-lg-12">
+      {else}
+      <div class="col-lg-9">
+      {/if}
+        <div class="panel1 panel1-primary">
+
+            <div class="accordion" id="Parent_Filters">
+              <div class="accordion-group">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#Parent_Filters" href="#hrefFilters">
+                  <div class="panel1-heading" id="heading_Filter">
+                    <h4 class="panel1-title"><i class="fa fa-filter"></i> Filters</h4>
+                  </div>
+                </a>
+              </div>
+              <div id="hrefFilters" class="accordion-body collapse">
+                <div class="accordion-inner">
+                  <div class="panel1-body">
+                        <div id="Filters">
+    
+                          <div class="row">
+                            <div class="col-lg-3">
+                              <label><strong>Years</strong></label>
+                            </div>
+                            <div class="col-lg-9">
+                              <select id="from" required="required" >
+                                <!--<option value=""> -- Select -- </option>-->
+                                {$startYearRange}
+                              </select>
+                              &nbsp;<label><strong>To</strong></label>&nbsp;
+                              <select id="to" required="required" >
+                                <!--<option value=""> -- Select -- </option>-->
+                                {$endYearRange}
+                              </select>
+                            </div>
+                          </div>
+                          <br />
+                          <!-- Filter by membership type   -->
+                          <div class="row">
+                            <div class="col-lg-3">
+                              <label><strong>Membership Types</strong></label><br />
+                              <input type="checkbox" id="select_deselect_all" value="1" checked/>
+                              <label for="select_deselect_all">Select / Deselect All</label>
+                            </div>
+                            <div class="col-lg-9">
+                              <div class="row">
+                              <div class="checkbox checkbox-success">
+                                {foreach from=$memTypes item=mTypes key=mTypeId}
+                                <div class="col-xs-6">
+                                  <input type="checkbox" name="membership_type_id" id="mem_type_{$mTypeId}" value="{$mTypeId}" checked/>
+                                  <label for="mem_type_{$mTypeId}">{$mTypes}</label>
+                                </div>
+                                {/foreach}
+                              </div>  
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+            </div>
+        </div>
+      </div>
+      <div class="col-lg-3" {if $smarty.get.snippet neq ''} style="display:none;"{/if}>
+        <div class="panel1 panel1-primary">
+            <div class="accordion" id="Parent_Settings">
+              <div class="accordion-group">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#Parent_Settings" href="#hrefSettings">
+                  <div class="panel1-heading" id="heading_Settings">
+                    <h4 class="panel1-title"><i class="fa fa-gear"></i> Settings</h4>
+                  </div>
+                </a>
+              </div>
+              <div id="hrefSettings" class="accordion-body collapse">
+                <div class="accordion-inner">
+                  <div class="panel1-body">
+                    <div class="col-lg-12">
+                      <p class="text-center">
+                        <a class="btn btn-success" href="{crmURL p="civicrm/membership/membershipchurnchart/settings" q="reset=1"}"><i class="fa fa-wrench"></i> Settings</a> 
+                      </p>
+                      <p class="text-center">
+                        <a class="btn btn-success" id="refreshData" href="#"><i class="fa fa-refresh"></i> Refresh Data</a> 
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
 </div>
 
 {literal}  
@@ -218,8 +236,28 @@ jQuery("#to").change(function(){
   refreshChart();
 });
 
+jQuery("#select_deselect_all").click(function () {
+  if(this.checked){
+    jQuery('input:checkbox[name=membership_type_id]').each(function(){
+      this.checked = true;
+    });
+  } else {
+    jQuery('input:checkbox[name=membership_type_id]').each(function(){
+      this.checked = false;
+    });
+  }
+  refreshChart();
+});
+
 // Membership type filter
 jQuery('input:checkbox[name=membership_type_id]').change(function() {
+  var checkedBoxes = jQuery('input:checkbox[name=membership_type_id]:checked').length;
+  var allCheckBoxes = jQuery('input:checkbox[name=membership_type_id]').length;
+  if(checkedBoxes == allCheckBoxes){
+    jQuery('#select_deselect_all').attr('checked','checked');
+  }else{
+    jQuery('#select_deselect_all').removeAttr('checked');
+  }
   refreshChart();
 });
 
@@ -360,7 +398,7 @@ function buildChart(data, allStatus, minChurn = 1, churnId = null) {
 
   var margin = {top: 20, right: 160, bottom: 60, left: 60};
   var rowWidth = parseInt(d3.select('#row_Churnchart').style('width'), 10);
-
+  
   var width = rowWidth - margin.left - margin.right,
       height = 600 - margin.top - margin.bottom,
       padding = 100; // space around the chart, not including labels
@@ -435,7 +473,13 @@ function buildChart(data, allStatus, minChurn = 1, churnId = null) {
     .attr("class", "x axis")
     //.attr("class", "xaxis")
     .attr("transform", "translate(0," + height + ")")
-    .call(xAxis);
+    .call(xAxis)
+    .selectAll("text")
+    .attr("y", 0)
+    .attr("x", 9)
+    .attr("dy", ".35em")
+    .attr("transform", "rotate(90)")
+    .style("text-anchor", "start");
 
   // Create groups for each series, rects for each segment 
   // don't need to fill churn rate chart colors, we display based on value not by segment. 

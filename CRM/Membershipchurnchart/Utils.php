@@ -260,11 +260,11 @@ class CRM_Membershipchurnchart_Utils {
     }
   }
 
-  function getAllMemberStatusesForChart(){
+  public static function getAllMemberStatusesForChart(){
     return array(/*'Brought Forward',*/'Current', 'Joined', 'Resigned', 'Rejoined');
   }
 
-  function getMinChurnValuesForYaxis($row){
+  public static function getMinChurnValuesForYaxis($row){
     $allChurns = $chruns = array();
     foreach ($row as $year => $monthlyData) {
       $chruns = array();
@@ -278,7 +278,7 @@ class CRM_Membershipchurnchart_Utils {
     return $allChurns;
   }
 
-  function getAllmembershipTypes(){
+  public static function getAllmembershipTypes(){
     return CRM_Member_PseudoConstant::membershipType();
   }
 }

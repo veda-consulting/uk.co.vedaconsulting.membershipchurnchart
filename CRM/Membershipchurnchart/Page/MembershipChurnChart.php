@@ -69,15 +69,15 @@ class CRM_Membershipchurnchart_Page_MembershipChurnChart extends CRM_Core_Page {
     $allStatuses = json_encode(array_values($allStatuses));
     $this->assign('allStatuses', $allStatuses);
 
-    // Chart data
-    $chartData = json_encode($chartData);
-  	$this->assign('chartData', $chartData);
-    $this->assign('currentYear', $currentYear);
-
     // Minimum churn data
     $minChurn = CRM_Membershipchurnchart_Utils::getMinChurnValuesForYaxis($chartData);
     $jMinChurn = json_encode($minChurn, JSON_HEX_QUOT);
     $this->assign('minChurn', $jMinChurn);
+
+    // Chart data
+    $chartData = json_encode($chartData);
+    $this->assign('chartData', $chartData);
+    $this->assign('currentYear', $currentYear);
 
     parent::run();
   }
