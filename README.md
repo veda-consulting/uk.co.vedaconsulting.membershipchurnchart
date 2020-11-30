@@ -13,7 +13,7 @@ This extension helps you to view the membership churn chart as well as membershi
 
 ## Settings
 
-Configure the start year from which the membership churn chart data to be prepared. 
+Configure the start year from which the membership churn chart data to be prepared.
 
 1. Navigate to Click Memberships >> Membership Churn Chart. Click 'Settings' button.
 2. Set the start year from which the membership churn chart data to be prepared and save
@@ -28,7 +28,7 @@ During installation the extension will create a new scheduled job 'Membership Ch
 The extension will also create 2 database tables to prepare and consolidate churn chart data.
 
 ```sql
-CREATE TABLE IF NOT EXISTS `membership_churn_table` (
+CREATE TABLE IF NOT EXISTS `civicrm_membership_churn_table` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique Id',
   `year` int(11) DEFAULT NULL,
   `month` int(11) DEFAULT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `membership_churn_table` (
   `rejoined` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
-CREATE TABLE IF NOT EXISTS `membership_churn_monthly_table` (
+CREATE TABLE IF NOT EXISTS `civicrm_membership_churn_monthly_table` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique Id',
   `month_year` VARCHAR(255) DEFAULT NULL,
   `year` int(11) DEFAULT NULL,
@@ -56,8 +56,8 @@ CREATE TABLE IF NOT EXISTS `membership_churn_monthly_table` (
 );
 ```
 
-* 'membership_churn_table' table is used to store the status (Joined/Current/Resigned/Rejoined) of each membership records for each month/year.
-* 'membership_churn_monthly_table' table is used to consolidate the membership records grouped by membership type/year/month, which is used to render the chart.
+* 'civicrm_membership_churn_table' table is used to store the status (Joined/Current/Resigned/Rejoined) of each membership records for each month/year.
+* 'civicrm_membership_churn_monthly_table' table is used to consolidate the membership records grouped by membership type/year/month, which is used to render the chart.
 
 ### Statuses (For the month):
 * Brought forward = (Joined + Rejoined + Current) - Resigned, from the previous month

@@ -41,7 +41,7 @@
 }
 </style>
 {/literal}
-  
+
 <div class="container-fluid">
 
     <div style="display:none;" id="spinner">
@@ -101,7 +101,7 @@
     </div>
 
     <div class="row" id="row_Filters">
-      {if $smarty.get.snippet neq ''} 
+      {if $smarty.get.snippet neq ''}
       <div class="col-lg-12">
       {else}
       <div class="col-lg-9">
@@ -121,7 +121,7 @@
                 <div class="accordion-inner">
                   <div class="panel1-body">
                         <div id="Filters">
-    
+
                           <div class="row">
                             <div class="col-lg-3">
                               <label><strong>Years</strong></label>
@@ -155,7 +155,7 @@
                                   <label for="mem_type_{$mTypeId}">{$mTypes}</label>
                                 </div>
                                 {/foreach}
-                              </div>  
+                              </div>
                               </div>
                             </div>
                           </div>
@@ -183,10 +183,10 @@
                   <div class="panel1-body">
                     <div class="col-lg-12">
                       <p class="text-center">
-                        <a class="btn btn-success" href="{crmURL p="civicrm/membership/membershipchurnchart/settings" q="reset=1"}"><i class="fa fa-wrench"></i> Settings</a> 
+                        <a class="btn btn-success" href="{crmURL p="civicrm/admin/setting/membershipchurnchart" q="reset=1"}"><i class="fa fa-wrench"></i> Settings</a>
                       </p>
                       <p class="text-center">
-                        <a class="btn btn-success" id="refreshData" href="#"><i class="fa fa-refresh"></i> Refresh Data</a> 
+                        <a class="btn btn-success" id="refreshData" href="#"><i class="fa fa-refresh"></i> Refresh Data</a>
                       </p>
                     </div>
                   </div>
@@ -200,7 +200,7 @@
 
 </div>
 
-{literal}  
+{literal}
 <script type="text/javascript">
 
 var mainData = {/literal}{$chartData}{literal};
@@ -272,7 +272,7 @@ function getChartData() {
 
   // Main chart data
   var mainData = {/literal}{$chartData}{literal};
-  
+
   var fromYear = jQuery("#from").val();
   var toYear = jQuery("#to").val();
   var data = [];
@@ -285,15 +285,19 @@ function getChartData() {
   var rejoined_stats = 0;
   var churn_stats = 0;
 
+  if (mainData.length === 0) {
+    return;
+  }
+
   // Prepare data needed to render the chart
   // Loop through start and end year from the filters
   for (var i = fromYear; i <= toYear; i++) {
-    
+
     selectedYears.push(i);
 
     // Get all checked membership types from the filters
-    jQuery('input:checkbox[name=membership_type_id]').each(function() 
-    {    
+    jQuery('input:checkbox[name=membership_type_id]').each(function()
+    {
       if(jQuery(this).is(':checked')) {
         var memTypeId = jQuery(this).val();
 
@@ -313,7 +317,7 @@ function getChartData() {
               tempdata[date]['Resigned'] = parseInt(tempdata[date]['Resigned']) + parseInt(value['Resigned']);
               tempdata[date]['Rejoined'] = parseInt(tempdata[date]['Rejoined']) + parseInt(value['Rejoined']);
               //tempdata[date]['Churn'] = parseFloat(tempdata[date]['Churn']) + parseFloat(value['Churn']);
-            } 
+            }
             // if no data row available for current month/year, add a new row
             else {
               tempdata[date] = value;
@@ -374,11 +378,12 @@ function getChartData() {
 // Get chart dayta
 data = getChartData();
 
-// Render membership summary chart
-buildChart(data, allStatus, churn);
-
-// Render churn chart
-buildChart(data, churnstatus, -5, churnChartElementID);
+if (data !== undefined) {
+  // Render membership summary chart
+  buildChart(data, allStatus, churn);
+  // Render churn chart
+  buildChart(data, churnstatus, -5, churnChartElementID);
+}
 
 /*
  * Function to build bar chart using D3 charts
@@ -398,7 +403,7 @@ function buildChart(data, allStatus, minChurn = 1, churnId = null) {
 
   var margin = {top: 20, right: 160, bottom: 60, left: 60};
   var rowWidth = parseInt(d3.select('#row_Churnchart').style('width'), 10);
-  
+
   var width = rowWidth - margin.left - margin.right,
       height = 600 - margin.top - margin.bottom,
       padding = 100; // space around the chart, not including labels
@@ -409,12 +414,12 @@ function buildChart(data, allStatus, minChurn = 1, churnId = null) {
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    
+
   var dataset = d3.layout.stack()(allStatus.map(function(status) {
       return data.map(function(d) {
         return {
           date: d['date'],
-          x: d['month'] +  '/' + d['year'], 
+          x: d['month'] +  '/' + d['year'],
           y: +d[status],
           brought_forward: +d['Brought_Forward'],
           current: +d['Current'],
@@ -481,8 +486,8 @@ function buildChart(data, allStatus, minChurn = 1, churnId = null) {
     .attr("transform", "rotate(90)")
     .style("text-anchor", "start");
 
-  // Create groups for each series, rects for each segment 
-  // don't need to fill churn rate chart colors, we display based on value not by segment. 
+  // Create groups for each series, rects for each segment
+  // don't need to fill churn rate chart colors, we display based on value not by segment.
   if(churnId){
     var groups = svg.selectAll("g.cost")
     .data(dataset)
@@ -504,7 +509,7 @@ function buildChart(data, allStatus, minChurn = 1, churnId = null) {
     .enter()
     .append("rect")
     .attr("x", function(d) { return x(d.x); })
-    .attr("y", function(d) { if(churnId && d.y < 0){ return y(0); } else { return y(d.y0 + d.y);} })
+    .attr("y", function(d) { if(churnId && d.y < 0) { return y(0); } else { return y(d.y0 + d.y);} })
     .attr("height", function(d) { return Math.abs(y(d.y0) - y(d.y0 + d.y)); })
     .attr("width", x.rangeBand())
     .on("mouseover", function (d) { showPopover.call(this, d, churnId); })
@@ -521,19 +526,19 @@ function buildChart(data, allStatus, minChurn = 1, churnId = null) {
     .enter().append("g")
     .attr("class", "legend")
     .attr("transform", function(d, i) { return "translate(30," + i * 19 + ")"; });
-   
+
   legend.append("rect")
     .attr("x", width - 18)
     .attr("width", 18)
     .attr("height", 18)
     .style("fill", function(d, i) {return colors[i];});
-   
+
   legend.append("text")
     .attr("x", width + 5)
     .attr("y", 9)
     .attr("dy", ".35em")
     .style("text-anchor", "start")
-    .text(function(d, i) { 
+    .text(function(d, i) {
       return allStatus[i];
   });
 }
@@ -558,8 +563,8 @@ function showPopover (d, churnId) {
            + "<br/>Resigned: " + d.resigned
            + "<br/>Rejoined: " + d.rejoined
            ;
-        //"Brought Forward: " + d.brought_forward   
-      }        
+        //"Brought Forward: " + d.brought_forward
+      }
     }
   });
   cj(this).popover('show')

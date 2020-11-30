@@ -36,7 +36,7 @@ class CRM_Membershipchurnchart_Utils {
   public static function prepareChurnTable() {
 
     // Truncate membership churn data table
-    CRM_Core_DAO::executeQuery("TRUNCATE TABLE `membership_churn_table`");
+    CRM_Core_DAO::executeQuery("TRUNCATE TABLE `civicrm_membership_churn_table`");
 
     // Get membership churn chart settings
     $settingsStr = CRM_Core_BAO_Setting::getItem('CiviCRM Membershipchurnchart Settings', 'membershipchurnchart_settings');
@@ -69,7 +69,7 @@ class CRM_Membershipchurnchart_Utils {
     }
 
     // Delete all stats which are greater than and equal to current year/month
-    $deleteSql = "DELETE FROM membership_churn_table WHERE year >= %1 AND month >= %2";
+    $deleteSql = "DELETE FROM civicrm_membership_churn_table WHERE year >= %1 AND month >= %2";
     $deleteParams = [
       1 => [$end_year, 'Integer'],
       2 => [$end_month, 'Integer'],
@@ -77,20 +77,20 @@ class CRM_Membershipchurnchart_Utils {
     CRM_Core_DAO::executeQuery($deleteSql, $deleteParams);
 
     // Truncate membership churn monthly data table
-    CRM_Core_DAO::executeQuery("TRUNCATE TABLE `membership_churn_monthly_table`");
+    CRM_Core_DAO::executeQuery("TRUNCATE TABLE `civicrm_membership_churn_monthly_table`");
 
-    $monthlyDataSql = "INSERT INTO membership_churn_monthly_table (year, month, membership_type_id,
+    $monthlyDataSql = "INSERT INTO civicrm_membership_churn_monthly_table (year, month, membership_type_id,
     current, joined, resigned, rejoined)
     SELECT year, month, membership_type_id,
     count(current) as current,
     count(joined) as joined,
     count(resigned) as resigned,
     count(rejoined) as rejoined
-    FROM membership_churn_table GROUP BY membership_type_id, year, month ORDER BY year, month
+    FROM civicrm_membership_churn_table GROUP BY membership_type_id, year, month ORDER BY year, month
     ";
     CRM_Core_DAO::executeQuery($monthlyDataSql);
 
-    $allMonthlyData = "SELECT * FROM membership_churn_monthly_table";
+    $allMonthlyData = "SELECT * FROM civicrm_membership_churn_monthly_table";
     $allMonthlyDataRes = CRM_Core_DAO::executeQuery($allMonthlyData);
     while($allMonthlyDataRes->fetch()) {
 
@@ -106,7 +106,7 @@ class CRM_Membershipchurnchart_Utils {
       $previous_year = date("Y", strtotime($current_month. " -1 months"));
 
       // Get data for previous period
-      $broughtForwardSql = "SELECT * FROM membership_churn_monthly_table WHERE year = %1 AND month = %2 AND membership_type_id = %3";
+      $broughtForwardSql = "SELECT * FROM civicrm_membership_churn_monthly_table WHERE year = %1 AND month = %2 AND membership_type_id = %3";
       $broughtForwardParams = [
         1 => [$previous_year, 'Integer'],
         2 => [$previous_month, 'Integer'],
@@ -132,7 +132,7 @@ class CRM_Membershipchurnchart_Utils {
       //negatives should become positive
       //$churn = $churn * -1;
 
-      $monthDataUpdateSql = "UPDATE membership_churn_monthly_table SET
+      $monthDataUpdateSql = "UPDATE civicrm_membership_churn_monthly_table SET
       brought_forward = %1, churn = %2 ,month_year = %3
       WHERE id = %4";
       $monthDataUpdateParams = [
@@ -147,7 +147,7 @@ class CRM_Membershipchurnchart_Utils {
     // Delete all stats which are less than start year
     // we need to delete the data we got for previous month
     // to get brought forward value
-    $deleteSql = "DELETE FROM membership_churn_monthly_table WHERE year < %1";
+    $deleteSql = "DELETE FROM civicrm_membership_churn_monthly_table WHERE year < %1";
     $deleteParams = [
       1 => [$start_year, 'Integer'],
     ];
@@ -166,7 +166,7 @@ class CRM_Membershipchurnchart_Utils {
 
     // Carry forward / Current
     $carryForwardSql = "
-    INSERT INTO membership_churn_table (year, month, membership_id, membership_type_id, current)
+    INSERT INTO civicrm_membership_churn_table (year, month, membership_id, membership_type_id, current)
     SELECT {$year}, {$month}, m.id, m.membership_type_id, 1 FROM civicrm_membership m
     INNER JOIN civicrm_contact c ON m.contact_id = c.id
     WHERE c.is_deleted = 0
@@ -175,7 +175,7 @@ class CRM_Membershipchurnchart_Utils {
 
     // Joined
     $joinedSql = "
-    INSERT INTO membership_churn_table (year, month, membership_id, membership_type_id, joined)
+    INSERT INTO civicrm_membership_churn_table (year, month, membership_id, membership_type_id, joined)
     SELECT {$year}, {$month}, m.id, m.membership_type_id, 1 FROM civicrm_membership m
     INNER JOIN civicrm_contact c ON m.contact_id = c.id
     WHERE c.is_deleted = 0
@@ -193,7 +193,7 @@ class CRM_Membershipchurnchart_Utils {
 
     // Resigned
     $resignedSql = "
-    INSERT INTO membership_churn_table (year, month, membership_id, membership_type_id, resigned)
+    INSERT INTO civicrm_membership_churn_table (year, month, membership_id, membership_type_id, resigned)
     SELECT {$year}, {$month}, m.id, m.membership_type_id, 1 FROM civicrm_membership m
     INNER JOIN civicrm_contact c ON m.contact_id = c.id
     WHERE c.is_deleted = 0
@@ -202,7 +202,7 @@ class CRM_Membershipchurnchart_Utils {
 
     // Rejoin
     $rejoinedSql = "
-    INSERT INTO membership_churn_table (year, month, membership_id, membership_type_id, rejoined)
+    INSERT INTO civicrm_membership_churn_table (year, month, membership_id, membership_type_id, rejoined)
     SELECT {$year}, {$month}, m.id, m.membership_type_id, 1 FROM civicrm_membership m
     INNER JOIN civicrm_contact c ON m.contact_id = c.id
     WHERE c.is_deleted = 0

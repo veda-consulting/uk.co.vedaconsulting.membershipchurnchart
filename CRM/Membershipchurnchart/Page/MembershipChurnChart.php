@@ -6,10 +6,12 @@ class CRM_Membershipchurnchart_Page_MembershipChurnChart extends CRM_Core_Page {
 
   function run() {
 
+    CRM_Core_Session::singleton()->replaceUserContext(CRM_Utils_System::url('civicrm/membership/membershipchurnchart', "reset=1"));
+
     $chartData = [];
 
     // Get churn chart data
-    $sql = "SELECT * FROM membership_churn_monthly_table ORDER BY year, month";
+    $sql = "SELECT * FROM civicrm_membership_churn_monthly_table ORDER BY year, month";
     $sqlRes = CRM_Core_DAO::executeQuery($sql);
 
     $totalStats = $years = [];
@@ -33,12 +35,10 @@ class CRM_Membershipchurnchart_Page_MembershipChurnChart extends CRM_Core_Page {
     }
 
     // Get membership churn chart settings
-    $settingsStr = CRM_Core_BAO_Setting::getItem('CiviCRM Membershipchurnchart Settings', 'membershipchurnchart_settings');
-    $settingsArray = unserialize($settingsStr);
-    $startYear = $currentYear = date('Y'); // Current
-    // Check if start date is set in settings page
-    if (!empty($settingsArray['start_year'])) {
-      $startYear = $settingsArray['start_year'];
+    $startYear = (int) \Civi::settings()->get('membershipchurnchart_startyear');
+    $currentYear = date('Y');
+    if (empty($startYear)) {
+      $startYear = $currentYear;
     }
 
     // Start year filters

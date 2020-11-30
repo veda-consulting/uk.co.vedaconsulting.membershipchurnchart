@@ -121,9 +121,19 @@ function membershipchurnchart_civicrm_alterSettingsFolders(&$metaDataFolders = N
 }
 
 /**
+ * Implements hook_civicrm_alterLogTables().
+ *
+ * Exclude tables from logging tables since they hold data that can be regenerated automatically.
+ */
+function membershipchurnchart_civicrm_alterLogTables(&$logTableSpec) {
+  unset($logTableSpec['civicrm_membership_churn_table']);
+  unset($logTableSpec['civicrm_membership_churn_monthly_table']);
+}
+
+/**
  * Adds a navigation menu item under report.
  */
-function membershipchurnchart_civicrm_navigationMenu(&$params ) {
+function membershipchurnchart_civicrm_navigationMenu(&$menu) {
   _membershipchurnchart_civix_insert_navigation_menu($menu, 'Memberships', [
     'label' => E::ts('Membership Churn Chart'),
     'name' => 'membershipchurnchart',
