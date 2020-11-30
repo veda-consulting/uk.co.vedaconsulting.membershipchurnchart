@@ -16,7 +16,7 @@ return [
     'name' => 'membershipchurnchart_startyear',
     'type' => 'String',
     'html_type' => 'text',
-    'default' => '2010',
+    'default' => '',
     'is_domain' => 1,
     'is_contact' => 0,
     'title' => E::ts('Start Year'),

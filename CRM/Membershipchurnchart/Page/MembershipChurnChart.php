@@ -5,7 +5,6 @@ require_once 'CRM/Core/Page.php';
 class CRM_Membershipchurnchart_Page_MembershipChurnChart extends CRM_Core_Page {
 
   function run() {
-
     CRM_Core_Session::singleton()->replaceUserContext(CRM_Utils_System::url('civicrm/membership/membershipchurnchart', "reset=1"));
 
     $chartData = [];
@@ -14,9 +13,8 @@ class CRM_Membershipchurnchart_Page_MembershipChurnChart extends CRM_Core_Page {
     $sql = "SELECT * FROM civicrm_membership_churn_monthly_table ORDER BY year, month";
     $sqlRes = CRM_Core_DAO::executeQuery($sql);
 
-    $totalStats = $years = [];
+    $years = [];
     while($sqlRes->fetch()) {
-
       $years[$sqlRes->year] = $sqlRes->year;
 
       $data = [];
@@ -62,7 +60,7 @@ class CRM_Membershipchurnchart_Page_MembershipChurnChart extends CRM_Core_Page {
     $this->assign('endYearRange', $endYearOptions);
 
     // Membership types filter
-    $memTypes = CRM_Membershipchurnchart_Utils::getAllmembershipTypes();
+    $memTypes = CRM_Member_PseudoConstant::membershipType();
     $this->assign('memTypes', $memTypes);
 
     // All status to be displayed as legends

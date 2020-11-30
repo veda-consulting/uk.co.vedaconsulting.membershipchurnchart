@@ -1,68 +1,36 @@
 <?php
 
-require_once 'CRM/Core/Page.php';
-
 class CRM_Membershipchurnchart_Utils {
-  /**
-   * CiviCRM API wrapper
-   *
-   * @param string $entity
-   * @param string $action
-   * @param string $params
-   *
-   * @return array of API results
-   */
-  public static function CiviCRMAPIWrapper($entity, $action, $params) {
-
-    if (empty($entity) || empty($action) || empty($params)) {
-      return;
-    }
-
-    try {
-      $result = civicrm_api3($entity, $action, $params);
-    }
-    catch (Exception $e) {
-      CRM_Core_Error::debug_log_message('CiviCRM API Call Failed');
-      CRM_Core_Error::debug_var('CiviCRM API Call Error', $e);
-      return;
-    }
-
-    return $result;
-  }
 
   /**
    * Function to prepare churn table data
    */
   public static function prepareChurnTable() {
-
     // Truncate membership churn data table
     CRM_Core_DAO::executeQuery("TRUNCATE TABLE `civicrm_membership_churn_table`");
 
     // Get membership churn chart settings
-    $settingsStr = CRM_Core_BAO_Setting::getItem('CiviCRM Membershipchurnchart Settings', 'membershipchurnchart_settings');
-    $settingsArray = unserialize($settingsStr);
-    // Check if start date is set in settings page
-    if (!empty($settingsArray['start_year'])) {
-      $start_year = $settingsArray['start_year'];
-    } else {
+    $startYear = (int) \Civi::settings()->get('membershipchurnchart_startyear');
+    if (empty($startYear)) {
       // Start year not set
       // So get min and max year from civicrm_membership table
       $sql = "SELECT YEAR(MIN(join_date)) as min_join_date FROM civicrm_membership";
       $sqlRes = CRM_Core_DAO::executeQuery($sql);
       $sqlRes->fetch();
-      $start_year = $sqlRes->min_join_date;
+      $startYear = $sqlRes->min_join_date;
+      \Civi::settings()->set('membershipchurnchart_startyear', $startYear);
     }
 
     $end_year = date('Y'); // Current year
     $end_month = date('n'); // Current month
 
     // Get data for one month before the start year, to get the brought forward value
-    $startMonthYear = "{$start_year}-01";
+    $startMonthYear = "{$startYear}-01";
     $previous_month = date("m", strtotime($startMonthYear. " -1 months"));
     $previous_year = date("Y", strtotime($startMonthYear. " -1 months"));
     self::insertDataIntoChurnTable($previous_year, $previous_month);
 
-    for ($i = $start_year; $i <= $end_year; $i++) {
+    for ($i = $startYear; $i <= $end_year; $i++) {
       for ($j = 1; $j <= 12; $j++) {
         self::insertDataIntoChurnTable($i, $j);
       }
@@ -149,13 +117,12 @@ class CRM_Membershipchurnchart_Utils {
     // to get brought forward value
     $deleteSql = "DELETE FROM civicrm_membership_churn_monthly_table WHERE year < %1";
     $deleteParams = [
-      1 => [$start_year, 'Integer'],
+      1 => [$startYear, 'Integer'],
     ];
     CRM_Core_DAO::executeQuery($deleteSql, $deleteParams);
   }
 
   public static function insertDataIntoChurnTable($year, $month) {
-
     if (empty($year) || empty($month)) {
       return;
     }
@@ -219,8 +186,8 @@ class CRM_Membershipchurnchart_Utils {
     CRM_Core_DAO::executeQuery($rejoinedSql);
   }
 
-  public static function getAllMemberStatusesForChart(){
-    return [/*'Brought Forward',*/'Current', 'Joined', 'Resigned', 'Rejoined'];
+  public static function getAllMemberStatusesForChart() {
+    return ['Current', 'Joined', 'Resigned', 'Rejoined'];
   }
 
   public static function getMinChurnValuesForYaxis($row){
@@ -237,7 +204,4 @@ class CRM_Membershipchurnchart_Utils {
     return $allChurns;
   }
 
-  public static function getAllmembershipTypes(){
-    return CRM_Member_PseudoConstant::membershipType();
-  }
 }
