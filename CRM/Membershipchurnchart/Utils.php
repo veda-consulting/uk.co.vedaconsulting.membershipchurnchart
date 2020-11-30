@@ -52,7 +52,7 @@ class CRM_Membershipchurnchart_Utils {
       $sqlRes->fetch();
       $start_year = $sqlRes->min_join_date;
     }
-    
+
     $end_year = date('Y'); // Current year
     $end_month = date('n'); // Current month
 
@@ -63,33 +63,33 @@ class CRM_Membershipchurnchart_Utils {
     self::insertDataIntoChurnTable($previous_year, $previous_month);
 
     for ($i = $start_year; $i <= $end_year; $i++) {
-      for ($j = 1; $j <= 12; $j++) { 
+      for ($j = 1; $j <= 12; $j++) {
         self::insertDataIntoChurnTable($i, $j);
       }
     }
 
     // Delete all stats which are greater than and equal to current year/month
     $deleteSql = "DELETE FROM membership_churn_table WHERE year >= %1 AND month >= %2";
-    $deleteParams = array(
-      1 => array($end_year, 'Integer'), 
-      2 => array($end_month, 'Integer'),
-    );
+    $deleteParams = [
+      1 => [$end_year, 'Integer'],
+      2 => [$end_month, 'Integer'],
+    ];
     CRM_Core_DAO::executeQuery($deleteSql, $deleteParams);
 
     // Truncate membership churn monthly data table
     CRM_Core_DAO::executeQuery("TRUNCATE TABLE `membership_churn_monthly_table`");
 
-    $monthlyDataSql = "INSERT INTO membership_churn_monthly_table (year, month, membership_type_id, 
+    $monthlyDataSql = "INSERT INTO membership_churn_monthly_table (year, month, membership_type_id,
     current, joined, resigned, rejoined)
-    SELECT year, month, membership_type_id, 
-    count(current) as current, 
-    count(joined) as joined, 
+    SELECT year, month, membership_type_id,
+    count(current) as current,
+    count(joined) as joined,
     count(resigned) as resigned,
     count(rejoined) as rejoined
     FROM membership_churn_table GROUP BY membership_type_id, year, month ORDER BY year, month
     ";
     CRM_Core_DAO::executeQuery($monthlyDataSql);
-  
+
     $allMonthlyData = "SELECT * FROM membership_churn_monthly_table";
     $allMonthlyDataRes = CRM_Core_DAO::executeQuery($allMonthlyData);
     while($allMonthlyDataRes->fetch()) {
@@ -107,11 +107,11 @@ class CRM_Membershipchurnchart_Utils {
 
       // Get data for previous period
       $broughtForwardSql = "SELECT * FROM membership_churn_monthly_table WHERE year = %1 AND month = %2 AND membership_type_id = %3";
-      $broughtForwardParams = array(
-        1 => array($previous_year, 'Integer'), 
-        2 => array($previous_month, 'Integer'),
-        3 => array($allMonthlyDataRes->membership_type_id, 'Integer'),
-      );
+      $broughtForwardParams = [
+        1 => [$previous_year, 'Integer'],
+        2 => [$previous_month, 'Integer'],
+        3 => [$allMonthlyDataRes->membership_type_id, 'Integer'],
+      ];
       $broughtForwardRes = CRM_Core_DAO::executeQuery($broughtForwardSql, $broughtForwardParams);
       $broughtForward = $churn = 0;
       if ($broughtForwardRes->fetch()) {
@@ -132,25 +132,25 @@ class CRM_Membershipchurnchart_Utils {
       //negatives should become positive
       //$churn = $churn * -1;
 
-      $monthDataUpdateSql = "UPDATE membership_churn_monthly_table SET 
+      $monthDataUpdateSql = "UPDATE membership_churn_monthly_table SET
       brought_forward = %1, churn = %2 ,month_year = %3
       WHERE id = %4";
-      $monthDataUpdateParams = array(
-        1 => array($broughtForward, 'Integer'), 
-        2 => array($churn, 'String'), 
-        3 => array($month_year, 'String'),
-        4 => array($allMonthlyDataRes->id, 'Integer'),
-      );
-      CRM_Core_DAO::executeQuery($monthDataUpdateSql, $monthDataUpdateParams); 
+      $monthDataUpdateParams = [
+        1 => [$broughtForward, 'Integer'],
+        2 => [$churn, 'String'],
+        3 => [$month_year, 'String'],
+        4 => [$allMonthlyDataRes->id, 'Integer'],
+      ];
+      CRM_Core_DAO::executeQuery($monthDataUpdateSql, $monthDataUpdateParams);
     }
 
     // Delete all stats which are less than start year
-    // we need to delete the data we got for previous month 
+    // we need to delete the data we got for previous month
     // to get brought forward value
     $deleteSql = "DELETE FROM membership_churn_monthly_table WHERE year < %1";
-    $deleteParams = array(
-      1 => array($start_year, 'Integer'), 
-    );
+    $deleteParams = [
+      1 => [$start_year, 'Integer'],
+    ];
     CRM_Core_DAO::executeQuery($deleteSql, $deleteParams);
   }
 
@@ -167,18 +167,18 @@ class CRM_Membershipchurnchart_Utils {
     // Carry forward / Current
     $carryForwardSql = "
     INSERT INTO membership_churn_table (year, month, membership_id, membership_type_id, current)
-    SELECT {$year}, {$month}, m.id, m.membership_type_id, 1 FROM civicrm_membership m 
+    SELECT {$year}, {$month}, m.id, m.membership_type_id, 1 FROM civicrm_membership m
     INNER JOIN civicrm_contact c ON m.contact_id = c.id
-    WHERE c.is_deleted = 0 
+    WHERE c.is_deleted = 0
     AND join_date < '{$startDate}' AND end_date > '{$endDate}'";
     CRM_Core_DAO::executeQuery($carryForwardSql);
-    
+
     // Joined
     $joinedSql = "
     INSERT INTO membership_churn_table (year, month, membership_id, membership_type_id, joined)
-    SELECT {$year}, {$month}, m.id, m.membership_type_id, 1 FROM civicrm_membership m 
+    SELECT {$year}, {$month}, m.id, m.membership_type_id, 1 FROM civicrm_membership m
     INNER JOIN civicrm_contact c ON m.contact_id = c.id
-    WHERE c.is_deleted = 0 
+    WHERE c.is_deleted = 0
     AND join_date >= '{$startDate}' AND join_date <='{$endDate}'
     AND NOT EXISTS
      (
@@ -194,18 +194,18 @@ class CRM_Membershipchurnchart_Utils {
     // Resigned
     $resignedSql = "
     INSERT INTO membership_churn_table (year, month, membership_id, membership_type_id, resigned)
-    SELECT {$year}, {$month}, m.id, m.membership_type_id, 1 FROM civicrm_membership m 
+    SELECT {$year}, {$month}, m.id, m.membership_type_id, 1 FROM civicrm_membership m
     INNER JOIN civicrm_contact c ON m.contact_id = c.id
-    WHERE c.is_deleted = 0 
+    WHERE c.is_deleted = 0
     AND end_date >= '{$startDate}' AND end_date <='{$endDate}'";
     CRM_Core_DAO::executeQuery($resignedSql);
 
     // Rejoin
     $rejoinedSql = "
     INSERT INTO membership_churn_table (year, month, membership_id, membership_type_id, rejoined)
-    SELECT {$year}, {$month}, m.id, m.membership_type_id, 1 FROM civicrm_membership m 
+    SELECT {$year}, {$month}, m.id, m.membership_type_id, 1 FROM civicrm_membership m
     INNER JOIN civicrm_contact c ON m.contact_id = c.id
-    WHERE c.is_deleted = 0 
+    WHERE c.is_deleted = 0
     AND join_date >= '{$startDate}' AND join_date <='{$endDate}'
     AND EXISTS
      (
@@ -219,55 +219,14 @@ class CRM_Membershipchurnchart_Utils {
     CRM_Core_DAO::executeQuery($rejoinedSql);
   }
 
-  /**
-   * Function to create scheduled job for preparing membership churn table data
-   *
-   * @params boolean $is_active (is the schedule job active or not)
-   */
-  public static function createScheduledJob($is_active = 1) {
-
-    // Chekc if the schedule job exists
-    $selectSql = "SELECT * FROM civicrm_job WHERE api_entity = %1 AND api_action = %2";
-    $selectParams = array(
-      '1' => array( 'membershipchurnchart', 'String' ),
-      '2' => array( 'preparechurntable', 'String' ),
-    );
-    $selectDao = CRM_Core_DAO::executeQuery($selectSql, $selectParams);
-    if (!$selectDao->fetch()) {
-      // Create schedule job, if not exists
-      $domainId = CRM_Core_Config::domainID();
-      $query = "INSERT INTO civicrm_job SET domain_id = %1, run_frequency = %2, last_run = NULL, name = %3, description = %4,
-      api_entity = %5, api_action = %6, parameters = NULL, is_active = %7";
-      $params = array(
-        '1' => array($domainId, 'Integer' ),
-        '2' => array('Daily', 'String' ),
-        '3' => array('Membership Churn Chart - Prepare Data', 'String' ),
-        '4' => array('To prepare data for membership churn chart', 'String' ),
-        '5' => array('membershipchurnchart', 'String' ),
-        '6' => array('preparechurntable', 'String' ),
-        '7' => array(1, 'Integer' ),
-      );
-      CRM_Core_DAO::executeQuery($query, $params);
-    } else {
-      // Enabled/Disable based on settings
-      $updateSql = "UPDATE civicrm_job SET is_active = %3 WHERE api_entity = %1 AND api_action = %2";
-      $updateParams = array(
-        '1' => array('membershipchurnchart', 'String' ),
-        '2' => array('preparechurntable', 'String' ),
-        '3' => array($is_active , 'Integer' ),
-      );
-      $updateDao = CRM_Core_DAO::executeQuery($updateSql, $updateParams);
-    }
-  }
-
   public static function getAllMemberStatusesForChart(){
-    return array(/*'Brought Forward',*/'Current', 'Joined', 'Resigned', 'Rejoined');
+    return [/*'Brought Forward',*/'Current', 'Joined', 'Resigned', 'Rejoined'];
   }
 
   public static function getMinChurnValuesForYaxis($row){
-    $allChurns = $chruns = array();
+    $allChurns = $chruns = [];
     foreach ($row as $year => $monthlyData) {
-      $chruns = array();
+      $chruns = [];
       foreach ($monthlyData as $memType => $memTypeData) {
         foreach ($memTypeData as $months => $data) {
           $chruns[] = $data['Churn'];

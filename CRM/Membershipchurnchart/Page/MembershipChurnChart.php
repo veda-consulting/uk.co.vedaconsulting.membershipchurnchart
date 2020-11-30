@@ -3,20 +3,21 @@
 require_once 'CRM/Core/Page.php';
 
 class CRM_Membershipchurnchart_Page_MembershipChurnChart extends CRM_Core_Page {
+
   function run() {
 
-  	$chartData = array();
+    $chartData = [];
 
     // Get churn chart data
     $sql = "SELECT * FROM membership_churn_monthly_table ORDER BY year, month";
     $sqlRes = CRM_Core_DAO::executeQuery($sql);
 
-    $totalStats = $years = array();
+    $totalStats = $years = [];
     while($sqlRes->fetch()) {
 
       $years[$sqlRes->year] = $sqlRes->year;
 
-      $data = array();
+      $data = [];
       $data['date'] = $sqlRes->month_year;
       $data['year'] = $sqlRes->year;
       $data['month'] = $sqlRes->month;
