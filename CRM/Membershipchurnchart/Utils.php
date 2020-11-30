@@ -137,7 +137,7 @@ class CRM_Membershipchurnchart_Utils {
     SELECT {$year}, {$month}, m.id, m.membership_type_id, 1 FROM civicrm_membership m
     INNER JOIN civicrm_contact c ON m.contact_id = c.id
     WHERE c.is_deleted = 0
-    AND join_date < '{$startDate}' AND end_date > '{$endDate}'";
+    AND join_date < '{$startDate}' AND (end_date > '{$endDate}' OR end_date IS NULL)";
     CRM_Core_DAO::executeQuery($carryForwardSql);
 
     // Joined
