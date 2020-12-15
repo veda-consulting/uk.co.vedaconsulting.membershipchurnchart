@@ -145,9 +145,9 @@ function membershipchurnchart_civicrm_navigationMenu(&$menu) {
   _membershipchurnchart_civix_navigationMenu($menu);
 }
 
-function membershipchurnchart_civicrm_pageRun( &$page ){
-  $sPageName = $page->getVar('_name') ;
-  if($sPageName == "CRM_Membershipchurnchart_Page_MembershipChurnChart"){
+function membershipchurnchart_civicrm_pageRun(&$page) {
+  $sPageName = $page->getVar('_name');
+  if ($sPageName == "CRM_Membershipchurnchart_Page_MembershipChurnChart") {
     CRM_Core_Resources::singleton()
     ->addScriptFile('uk.co.vedaconsulting.membershipchurnchart', 'js/d3.v3.js', 110, 'html-header', FALSE)
     ->addScriptFile('uk.co.vedaconsulting.membershipchurnchart', 'js/dc/dc.js', 110, 'html-header', FALSE)
