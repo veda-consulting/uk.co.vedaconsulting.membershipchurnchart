@@ -112,4 +112,15 @@ class CRM_Membershipchurnchart_Upgrader extends CRM_Membershipchurnchart_Upgrade
     return TRUE;
   } // */
 
+  public function upgrade_1001() {
+    $this->ctx->log->info('Renaming database tables');
+    if (CRM_Core_DAO::checkTableExists('membership_churn_table')) {
+      CRM_Core_DAO::executeQuery('RENAME TABLE membership_churn_table TO civicrm_membership_churn_table');
+    }
+    if (CRM_Core_DAO::checkTableExists('membership_churn_monthly_table')) {
+      CRM_Core_DAO::executeQuery('RENAME TABLE membership_churn_monthly_table TO civicrm_membership_churn_monthly_table');
+    }
+    return TRUE;
+  }
+
 }

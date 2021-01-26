@@ -1,5 +1,5 @@
 -- Create tables to save chart data
-CREATE TABLE IF NOT EXISTS `membership_churn_table` (
+CREATE TABLE IF NOT EXISTS `civicrm_membership_churn_table` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique Id',
   `year` int(11) DEFAULT NULL,
   `month` int(11) DEFAULT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `membership_churn_table` (
   `rejoined` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
-CREATE TABLE IF NOT EXISTS `membership_churn_monthly_table` (
+CREATE TABLE IF NOT EXISTS `civicrm_membership_churn_monthly_table` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique Id',
   `month_year` VARCHAR(255) DEFAULT NULL,
   `year` int(11) DEFAULT NULL,

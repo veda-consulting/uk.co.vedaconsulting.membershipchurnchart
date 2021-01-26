@@ -7,9 +7,9 @@
     <access_arguments>access CiviCRM</access_arguments>
   </item>
   <item>
-    <path>civicrm/membership/membershipchurnchart/settings</path>
+    <path>civicrm/admin/setting/membershipchurnchart</path>
+    <title>Membership Churn Chart - Settings</title>
     <page_callback>CRM_Membershipchurnchart_Form_Settings</page_callback>
-    <title>Membership Churn Chart - Setting</title>
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
 </menu>
