@@ -227,22 +227,22 @@ cj('#refreshData').click(function(){
 });
 
 // Start year filter
-jQuery("#from").change(function(){
+cj("#from").change(function(){
   refreshChart();
 });
 
 // End year filter
-jQuery("#to").change(function(){
+cj("#to").change(function(){
   refreshChart();
 });
 
-jQuery("#select_deselect_all").click(function () {
+cj("#select_deselect_all").click(function () {
   if(this.checked){
-    jQuery('input:checkbox[name=membership_type_id]').each(function(){
+    cj('input:checkbox[name=membership_type_id]').each(function(){
       this.checked = true;
     });
   } else {
-    jQuery('input:checkbox[name=membership_type_id]').each(function(){
+    cj('input:checkbox[name=membership_type_id]').each(function(){
       this.checked = false;
     });
   }
@@ -250,13 +250,13 @@ jQuery("#select_deselect_all").click(function () {
 });
 
 // Membership type filter
-jQuery('input:checkbox[name=membership_type_id]').change(function() {
-  var checkedBoxes = jQuery('input:checkbox[name=membership_type_id]:checked').length;
-  var allCheckBoxes = jQuery('input:checkbox[name=membership_type_id]').length;
+cj('input:checkbox[name=membership_type_id]').change(function() {
+  var checkedBoxes = cj('input:checkbox[name=membership_type_id]:checked').length;
+  var allCheckBoxes = cj('input:checkbox[name=membership_type_id]').length;
   if(checkedBoxes == allCheckBoxes){
-    jQuery('#select_deselect_all').attr('checked','checked');
+    cj('#select_deselect_all').attr('checked','checked');
   }else{
-    jQuery('#select_deselect_all').removeAttr('checked');
+    cj('#select_deselect_all').removeAttr('checked');
   }
   refreshChart();
 });
@@ -273,8 +273,8 @@ function getChartData() {
   // Main chart data
   var mainData = {/literal}{$chartData}{literal};
 
-  var fromYear = jQuery("#from").val();
-  var toYear = jQuery("#to").val();
+  var fromYear = cj("#from").val();
+  var toYear = cj("#to").val();
   var data = [];
   var tempdata = {};
   var selectedYears = [];
@@ -296,15 +296,15 @@ function getChartData() {
     selectedYears.push(i);
 
     // Get all checked membership types from the filters
-    jQuery('input:checkbox[name=membership_type_id]').each(function()
+    cj('input:checkbox[name=membership_type_id]').each(function()
     {
-      if(jQuery(this).is(':checked')) {
-        var memTypeId = jQuery(this).val();
+      if(cj(this).is(':checked')) {
+        var memTypeId = cj(this).val();
 
         // Check if there is data for the membership type
         if (memTypeId in mainData[i]) {
           // Loop through all the data available for the membership type
-          jQuery.each( mainData[i][memTypeId], function( key, value ) {
+          cj.each( mainData[i][memTypeId], function( key, value ) {
 
             var date = value['month'] + '/' + value['year'];
 
@@ -338,7 +338,7 @@ function getChartData() {
 
     // Clean up the data needed to render the chart
     // by removing key from the array, as we dont need the key
-    jQuery.each( tempdata, function( key, value ) {
+    cj.each( tempdata, function( key, value ) {
       var churn = (parseInt(value['Joined']) + parseInt(value['Rejoined']) - parseInt(value['Resigned'])) / parseInt(value['Brought_Forward']) * 100;
       churn = churn.toFixed(2);
       value['Churn'] = churn;
@@ -347,12 +347,12 @@ function getChartData() {
   }
 
   // Display stats
-  // jQuery('#brought_forward_stats').text(brought_forward_stats);
-  // jQuery('#current_stats').text(current_stats);
-  // jQuery('#joined_stats').text(joined_stats);
-  // jQuery('#resigned_stats').text(resigned_stats);
-  // jQuery('#rejoined_stats').text(rejoined_stats);
-  // jQuery('#churn_stats').text(churn_stats + ' %');
+  // cj('#brought_forward_stats').text(brought_forward_stats);
+  // cj('#current_stats').text(current_stats);
+  // cj('#joined_stats').text(joined_stats);
+  // cj('#resigned_stats').text(resigned_stats);
+  // cj('#rejoined_stats').text(rejoined_stats);
+  // cj('#churn_stats').text(churn_stats + ' %');
 
   // Get number of years between the start and end year filters
   var yearsCount = 0;
@@ -370,7 +370,7 @@ function getChartData() {
   } else {
     selectedYearsStr = selectedYears[0];
   }
-  jQuery('.summaryYears').text(selectedYearsStr);
+  cj('.summaryYears').text(selectedYearsStr);
 
   return data;
 }
