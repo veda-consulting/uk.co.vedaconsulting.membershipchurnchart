@@ -45,7 +45,7 @@
 <div class="container-fluid">
 
     <div style="display:none;" id="spinner">
-      <i class="fa fa-refresh fa-spin btn-lg"></i> Refreshing data... Please wait for the page to reload.
+      <i class="fa fa-refresh fa-spin btn-lg" role="img" aria-hidden="true"></i> Refreshing data... Please wait for the page to reload.
     </div>
 
 
@@ -57,7 +57,7 @@
               <div class="accordion-heading">
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#Parent_Churnchar" href="#hrefChurnchar">
                   <div class="panel1-heading" id="heading_Churnchar">
-                    <h4 class="panel1-title"><i class="fa fa-bar-chart-o"></i> Churn By Month (<span class="summaryYears"></span>)</h4>
+                    <h4 class="panel1-title"><i class="fa fa-bar-chart-o" role="img" aria-hidden="true"></i> Churn By Month (<span class="summaryYears"></span>)</h4>
                   </div>
                 </a>
               </div>
@@ -83,7 +83,7 @@
                 <div class="accordion-heading">
                   <a class="accordion-toggle" data-toggle="collapse" data-parent="#Parent_Membershipsummary" href="#hrefMembershipsummary">
                     <div class="panel1-heading" id="heading_Membershipsummary">
-                      <h4 class="panel1-title"><i class="fa fa-bar-chart-o"></i> Membership Summary by Month (<span class="summaryYears"></span>)</h4>
+                      <h4 class="panel1-title"><i class="fa fa-bar-chart-o" role="img" aria-hidden="true"></i> Membership Summary by Month (<span class="summaryYears"></span>)</h4>
                     </div>
                   </a>
                 </div>
@@ -113,7 +113,7 @@
               <div class="accordion-heading">
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#Parent_Filters" href="#hrefFilters">
                   <div class="panel1-heading" id="heading_Filter">
-                    <h4 class="panel1-title"><i class="fa fa-filter"></i> Filters</h4>
+                    <h4 class="panel1-title"><i class="fa fa-filter" role="img" aria-hidden="true"></i> Filters</h4>
                   </div>
                 </a>
               </div>
@@ -174,7 +174,7 @@
               <div class="accordion-heading">
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#Parent_Settings" href="#hrefSettings">
                   <div class="panel1-heading" id="heading_Settings">
-                    <h4 class="panel1-title"><i class="fa fa-gear"></i> Settings</h4>
+                    <h4 class="panel1-title"><i class="fa fa-gear" role="img" aria-hidden="true"></i> Settings</h4>
                   </div>
                 </a>
               </div>
@@ -183,10 +183,10 @@
                   <div class="panel1-body">
                     <div class="col-lg-12">
                       <p class="text-center">
-                        <a class="btn btn-success" href="{crmURL p="civicrm/admin/setting/membershipchurnchart" q="reset=1"}"><i class="fa fa-wrench"></i> Settings</a>
+                        <a class="btn btn-success" href="{crmURL p="civicrm/admin/setting/membershipchurnchart" q="reset=1"}"><i class="fa fa-wrench" role="img" aria-hidden="true"></i> Settings</a>
                       </p>
                       <p class="text-center">
-                        <a class="btn btn-success" id="refreshData" href="#"><i class="fa fa-refresh"></i> Refresh Data</a>
+                        <a class="btn btn-success" id="refreshData" href="#"><i class="fa fa-refresh" role="img" aria-hidden="true"></i> Refresh Data</a>
                       </p>
                     </div>
                   </div>
