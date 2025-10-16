@@ -202,7 +202,7 @@
 
 {literal}
 <script type="text/javascript">
-
+CRM.$(function($) {
 var mainData = {/literal}{$chartData}{literal};
 var currentYear = {/literal}{$currentYear}{literal};
 var allStatus = {/literal}{$allStatuses}{literal};
@@ -213,7 +213,7 @@ var churnstatus = ['Churn'];
 var churnChartElementID = 'churnChartDiv';
 
 // Refresh data
-cj('#refreshData').click(function(){
+$('#refreshData').click(function(){
   showSpinner();
 
   // Call the API to refresh chart data
@@ -227,22 +227,22 @@ cj('#refreshData').click(function(){
 });
 
 // Start year filter
-jQuery("#from").change(function(){
+$("#from").change(function(){
   refreshChart();
 });
 
 // End year filter
-jQuery("#to").change(function(){
+$("#to").change(function(){
   refreshChart();
 });
 
-jQuery("#select_deselect_all").click(function () {
+$("#select_deselect_all").click(function () {
   if(this.checked){
-    jQuery('input:checkbox[name=membership_type_id]').each(function(){
+    $('input:checkbox[name=membership_type_id]').each(function(){
       this.checked = true;
     });
   } else {
-    jQuery('input:checkbox[name=membership_type_id]').each(function(){
+    $('input:checkbox[name=membership_type_id]').each(function(){
       this.checked = false;
     });
   }
@@ -250,13 +250,13 @@ jQuery("#select_deselect_all").click(function () {
 });
 
 // Membership type filter
-jQuery('input:checkbox[name=membership_type_id]').change(function() {
-  var checkedBoxes = jQuery('input:checkbox[name=membership_type_id]:checked').length;
-  var allCheckBoxes = jQuery('input:checkbox[name=membership_type_id]').length;
+$('input:checkbox[name=membership_type_id]').change(function() {
+  var checkedBoxes = $('input:checkbox[name=membership_type_id]:checked').length;
+  var allCheckBoxes = $('input:checkbox[name=membership_type_id]').length;
   if(checkedBoxes == allCheckBoxes){
-    jQuery('#select_deselect_all').attr('checked','checked');
+    $('#select_deselect_all').attr('checked','checked');
   }else{
-    jQuery('#select_deselect_all').removeAttr('checked');
+    $('#select_deselect_all').removeAttr('checked');
   }
   refreshChart();
 });
@@ -273,8 +273,8 @@ function getChartData() {
   // Main chart data
   var mainData = {/literal}{$chartData}{literal};
 
-  var fromYear = jQuery("#from").val();
-  var toYear = jQuery("#to").val();
+  var fromYear = $("#from").val();
+  var toYear = $("#to").val();
   var data = [];
   var tempdata = {};
   var selectedYears = [];
@@ -296,10 +296,10 @@ function getChartData() {
     selectedYears.push(i);
 
     // Get all checked membership types from the filters
-    jQuery('input:checkbox[name=membership_type_id]').each(function()
+    $('input:checkbox[name=membership_type_id]').each(function()
     {
-      if(jQuery(this).is(':checked')) {
-        var memTypeId = jQuery(this).val();
+      if($(this).is(':checked')) {
+        var memTypeId = $(this).val();
 
         // Check if there is data for the membership type
         if (memTypeId in mainData[i]) {
@@ -347,12 +347,12 @@ function getChartData() {
   }
 
   // Display stats
-  // jQuery('#brought_forward_stats').text(brought_forward_stats);
-  // jQuery('#current_stats').text(current_stats);
-  // jQuery('#joined_stats').text(joined_stats);
-  // jQuery('#resigned_stats').text(resigned_stats);
-  // jQuery('#rejoined_stats').text(rejoined_stats);
-  // jQuery('#churn_stats').text(churn_stats + ' %');
+  // $('#brought_forward_stats').text(brought_forward_stats);
+  // $('#current_stats').text(current_stats);
+  // $('#joined_stats').text(joined_stats);
+  // $('#resigned_stats').text(resigned_stats);
+  // $('#rejoined_stats').text(rejoined_stats);
+  // $('#churn_stats').text(churn_stats + ' %');
 
   // Get number of years between the start and end year filters
   var yearsCount = 0;
@@ -370,7 +370,7 @@ function getChartData() {
   } else {
     selectedYearsStr = selectedYears[0];
   }
-  jQuery('.summaryYears').text(selectedYearsStr);
+  $('.summaryYears').text(selectedYearsStr);
 
   return data;
 }
@@ -399,7 +399,7 @@ function buildChart(data, allStatus, minChurn = 1, churnId = null) {
    // console.log(data);
   }
 
-  cj(metricElementWeek).html('');
+  $(metricElementWeek).html('');
 
   var margin = {top: 20, right: 160, bottom: 60, left: 60};
   var rowWidth = parseInt(d3.select('#row_Churnchart').style('width'), 10);
@@ -547,7 +547,7 @@ function buildChart(data, allStatus, minChurn = 1, churnId = null) {
  * Function to show hover popover element
  */
 function showPopover (d, churnId) {
-  cj(this).popover({
+  $(this).popover({
     title: '<b>' + d.date + '</b>',
     placement: 'auto top',
     container: 'body',
@@ -567,15 +567,15 @@ function showPopover (d, churnId) {
       }
     }
   });
-  cj(this).popover('show')
+  $(this).popover('show')
 }
 
 /*
  * Function to remove hover popover element
  */
 function removePopovers () {
-  cj('.popover').each(function() {
-    cj(this).remove();
+  $('.popover').each(function() {
+    $(this).remove();
   });
 }
 
@@ -589,12 +589,13 @@ function type(d) {
  * Function to show font awesome spinner
  */
 function showSpinner() {
-  message = cj('#spinner').html();
+  message = $('#spinner').html();
   BootstrapDialog.show({
     title: 'Refresh Data',
     message: message ,
     closable: true
   });
 }
+});
 </script>
 {/literal}
