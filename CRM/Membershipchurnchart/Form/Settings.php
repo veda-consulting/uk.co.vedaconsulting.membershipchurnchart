@@ -1,6 +1,4 @@
 <?php
-
-require_once 'CRM/Core/Form.php';
 use CRM_Membershipchurnchart_ExtensionUtil as E;
 
 class CRM_Membershipchurnchart_Form_Settings extends CRM_Admin_Form_Generic {
